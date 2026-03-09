@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARASITES ORANGE — SÉRIE CYBER 01</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #FF5500;
+  --orange2: #FF8C00;
+  --neon: #FF6B1A;
+  --white: #FFFFFF;
+  --offwhite: #F0EDE8;
+  --light: #E8E2D9;
+  --grey: #C8C0B4;
+  --dark: #1A1208;
+  --glow: 0 0 10px #FF550088, 0 0 30px #FF550044, 0 0 60px #FF550022;
+  --glow-strong: 0 0 10px #FF5500, 0 0 30px #FF5500AA, 0 0 60px #FF550066;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--dark);
+  font-family: 'Share Tech Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
+}
+.cursor-dot {
+  position: fixed; width: 8px; height: 8px;
+  background: var(--orange); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  box-shadow: var(--glow-strong);
+}
+.cursor-ring {
+  position: fixed; width: 36px; height: 36px;
+  border: 1px solid var(--orange);
+  border-radius: 50%; pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  opacity: .6;
+}
+.grid-bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,85,0,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,85,0,.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+header {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 48px;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,85,0,.15);
+}
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 1rem; letter-spacing: 6px;
+}
+.logo span { color: var(--orange); text-shadow: var(--glow); }
+nav { display: flex; gap: 32px; font-size: .65rem; letter-spacing: 3px; }
+nav a { color: var(--dark); text-decoration: none; opacity: .5; transition: opacity .2s, color .2s; }
+nav a:hover { opacity: 1; color: var(--orange); }
+.header-badge {
+  font-size: .6rem; letter-spacing: 3px;
+  border: 1px solid var(--orange); color: var(--orange); padding: 5px 14px;
+}
+@media(max-width: 768px) {
+  nav, .header-badge { display: none; }
+  header { padding: 16px 24px; }
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  padding-top: 60px;
+  position: relative; overflow: hidden;
+}
+@media(max-width: 768px) { .hero { grid-template-columns: 1fr; } }
+
+.hero-left {
+  background: var(--white);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 60px; position: relative; z-index: 2;
+}
+@media(max-width: 768px) { .hero-left { padding: 60px 28px; } }
+
+.hero-right {
+  background: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  min-height: 60vw;
+}
+.hero-right::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 20px,
+    rgba(255,255,255,.04) 20px, rgba(255,255,255,.04) 21px
+  );
+}
+.hero-right::after {
+  content: '';
+  position: absolute; bottom: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle at bottom right, rgba(255,255,255,.15), transparent 70%);
+}
+
+.hero-img-wrap {
+  position: relative; width: 78%; max-width: 420px; z-index: 2;
+}
+.hero-img-wrap img {
+  width: 100%; display: block;
+  filter: drop-shadow(0 20px 60px rgba(0,0,0,.3));
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-18px) rotate(1deg); }
+}
+.img-scan {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: rgba(255,255,255,.6);
+  animation: scan 3s linear infinite;
+  box-shadow: 0 0 12px rgba(255,255,255,.8);
+}
+@keyframes scan {
+  0% { top: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.hero-model-tag {
+  position: absolute; bottom: -22px; left: 0;
+  font-family: 'Orbitron', sans-serif; font-size: .55rem;
+  letter-spacing: 2px; color: rgba(255,255,255,.45); white-space: nowrap;
+}
+
+.hero-eyebrow {
+  font-size: .65rem; letter-spacing: 6px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 30px; height: 1px;
+  background: var(--orange); box-shadow: var(--glow);
+}
+h1 {
+  font-family: 'Orbitron', sans-serif; font-weight: 900;
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  line-height: .92; letter-spacing: -1px; margin-bottom: 32px;
+}
+h1 .outline { -webkit-text-stroke: 2px var(--dark); color: transparent; display: block; }
+h1 .solid { display: block; }
+h1 .accent { color: var(--orange); text-shadow: var(--glow); display: block; }
+.hero-desc {
+  font-size: .8rem; line-height: 1.9; color: #666;
+  max-width: 380px; margin-bottom: 40px;
+}
+.hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--orange); color: white;
+  font-family: 'Orbitron', sans-serif; font-size: .7rem;
+  letter-spacing: 3px; padding: 16px 32px;
+  text-decoration: none; text-transform: uppercase; cursor: none;
+  position: relative; overflow: hidden; transition: box-shadow .3s;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+}
+.btn-primary:hover { box-shadow: var(--glow-strong); }
+.btn-secondary {
+  border: 1px solid rgba(0,0,0,.2); color: var(--dark);
+  font-family: 'Orbitron', sans-serif; font-size: .7rem;
+  letter-spacing: 3px; padding: 16px 32px;
+  text-decoration: none; text-transform: uppercase; cursor: none;
+  transition: border-color .3s, color .3s;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+.btn-secondary:hover { border-color: var(--orange); color: var(--orange); }
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 48px;
+  padding-top: 32px; border-top: 1px solid rgba(0,0,0,.08);
+}
+.stat-val {
+  font-family: 'Orbitron', sans-serif; font-size: 1.6rem;
+  font-weight: 900; color: var(--orange); line-height: 1; margin-bottom: 4px;
+}
+.stat-label { font-size: .6rem; letter-spacing: 3px; text-transform: uppercase; opacity: .4; }
+
+/* TICKER */
+.ticker {
+  background: var(--dark); padding: 12px 0;
+  overflow: hidden; white-space: nowrap; position: relative;
+}
+.ticker::before, .ticker::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 1;
+}
+.ticker::before { left: 0; background: linear-gradient(90deg, var(--dark), transparent); }
+.ticker::after { right: 0; background: linear-gradient(-90deg, var(--dark), transparent); }
+.ticker-inner {
+  display: inline-block;
+  animation: ticker-move 22s linear infinite;
+  font-family: 'Orbitron', sans-serif; font-size: .65rem;
+  letter-spacing: 4px; color: var(--orange); text-shadow: var(--glow);
+}
+@keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.sep { color: rgba(255,85,0,.3); margin: 0 20px; }
+
+/* SPECS */
+.specs-section {
+  padding: 120px 0; background: var(--offwhite); position: relative; overflow: hidden;
+}
+.specs-section::before {
+  content: 'SPECS';
+  position: absolute; font-family: 'Orbitron', sans-serif;
+  font-size: 18vw; font-weight: 900; color: rgba(255,85,0,.04);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  white-space: nowrap; pointer-events: none;
+}
+.specs-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+.section-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 64px;
+}
+.section-head h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900; line-height: .95;
+}
+.section-head h2 em { font-style: normal; color: var(--orange); }
+.section-count { font-size: .65rem; letter-spacing: 4px; color: var(--orange); opacity: .6; }
+.specs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+@media(max-width: 768px) { .specs-grid { grid-template-columns: 1fr; } .specs-inner { padding: 0 24px; } }
+.spec-item {
+  background: white; padding: 36px 32px;
+  border-top: 3px solid transparent;
+  transition: border-color .3s, transform .3s; cursor: none;
+}
+.spec-item:hover { border-top-color: var(--orange); transform: translateY(-4px); }
+.spec-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+.spec-name {
+  font-family: 'Orbitron', sans-serif; font-size: .7rem;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 8px;
+}
+.spec-val-big {
+  font-family: 'Orbitron', sans-serif; font-size: 2rem;
+  font-weight: 900; line-height: 1; margin-bottom: 8px;
+}
+.spec-desc { font-size: .75rem; line-height: 1.7; opacity: .5; }
+
+/* DARK SECTION */
+.collar-section {
+  background: var(--dark); padding: 120px 0; position: relative; overflow: hidden;
+}
+.collar-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 0% 50%, rgba(255,85,0,.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 100% 50%, rgba(255,140,0,.08) 0%, transparent 60%);
+}
+.neon-line {
+  position: absolute; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+  box-shadow: var(--glow);
+  animation: neon-pulse 3s ease-in-out infinite;
+  left: 0; right: 0;
+}
+.neon-line:nth-child(1) { top: 30%; animation-delay: 0s; }
+.neon-line:nth-child(2) { top: 70%; animation-delay: 1.5s; }
+@keyframes neon-pulse { 0%,100% { opacity: .3; } 50% { opacity: .8; } }
+.collar-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 48px;
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+@media(max-width: 768px) { .collar-inner { grid-template-columns: 1fr; gap: 40px; padding: 0 24px; } }
+.collar-eyebrow {
+  font-size: .65rem; letter-spacing: 6px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 24px; text-shadow: var(--glow);
+}
+.collar-inner h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900;
+  line-height: .95; color: white; margin-bottom: 24px;
+}
+.collar-inner h2 span { color: var(--orange); text-shadow: var(--glow); }
+.collar-inner p { font-size: .8rem; line-height: 1.9; color: rgba(255,255,255,.5); margin-bottom: 16px; }
+.data-readout {
+  background: rgba(255,85,0,.05);
+  border: 1px solid rgba(255,85,0,.2); padding: 28px; margin-top: 32px;
+}
+.data-row {
+  display: flex; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,85,0,.1);
+  font-size: .72rem;
+}
+.data-row:last-child { border: none; }
+.data-key { color: rgba(255,255,255,.4); letter-spacing: 2px; text-transform: uppercase; }
+.data-val { color: var(--orange); text-shadow: var(--glow); font-weight: 700; }
+.cyber-frame {
+  position: relative; padding: 20px;
+  background: rgba(255,85,0,.05); border: 1px solid rgba(255,85,0,.3);
+}
+.cyber-frame::before, .cyber-frame::after {
+  content: ''; position: absolute; width: 20px; height: 20px;
+}
+.cyber-frame::before {
+  top: -1px; left: -1px;
+  border-top: 2px solid var(--orange); border-left: 2px solid var(--orange);
+  box-shadow: var(--glow);
+}
+.cyber-frame::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 2px solid var(--orange); border-right: 2px solid var(--orange);
+  box-shadow: var(--glow);
+}
+.cyber-frame img {
+  width: 100%; display: block;
+  filter: sepia(.3) hue-rotate(350deg) saturate(1.5) contrast(1.1);
+}
+.scan-overlay {
+  position: absolute; left: 20px; right: 20px; top: 20px; bottom: 20px;
+  pointer-events: none; overflow: hidden;
+}
+.scan-line {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,85,0,.6), transparent);
+  animation: scan2 4s linear infinite;
+  box-shadow: 0 0 10px rgba(255,85,0,.5);
+}
+@keyframes scan2 {
+  0% { top: 0; opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { top: 100%; opacity: 0; }
+}
+.cyber-tag {
+  position: absolute; top: 0; right: 0;
+  background: var(--orange); color: white;
+  font-family: 'Orbitron', sans-serif; font-size: .55rem;
+  letter-spacing: 2px; padding: 6px 12px;
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+.id-label {
+  position: absolute; bottom: 0; left: 0;
+  font-family: 'Orbitron', sans-serif; font-size: .55rem;
+  letter-spacing: 2px; color: rgba(255,85,0,.5); padding: 10px;
+}
+
+/* TESTIMONIAL */
+.testimonial-section {
+  padding: 120px 0; background: var(--white); position: relative; overflow: hidden;
+}
+.testimonial-section::before {
+  content: '"';
+  position: absolute; font-family: 'Orbitron', sans-serif;
+  font-size: 40vw; font-weight: 900; color: rgba(255,85,0,.03);
+  top: -10%; left: -5%; line-height: 1; pointer-events: none;
+}
+.testimonial-inner { max-width: 900px; margin: 0 auto; padding: 0 48px; }
+@media(max-width: 768px) { .testimonial-inner { padding: 0 24px; } }
+.testimonial-card {
+  background: var(--dark); padding: 60px; position: relative;
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+}
+@media(max-width: 768px) { .testimonial-card { padding: 36px 28px; } }
+.testimonial-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at top right, rgba(255,85,0,.08) 0%, transparent 60%);
+}
+.testimonial-card::after {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange) 30%, var(--orange) 70%, transparent);
+  box-shadow: var(--glow);
+}
+.rating { display: flex; gap: 6px; margin-bottom: 32px; }
+.star {
+  width: 10px; height: 10px; background: var(--orange);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  box-shadow: 0 0 6px var(--orange);
+}
+.testimonial-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 2rem); font-weight: 300;
+  line-height: 1.6; color: white; margin-bottom: 40px;
+  position: relative; z-index: 1;
+}
+.testimonial-text strong { font-weight: 700; color: var(--orange); text-shadow: var(--glow); }
+.testimonial-author {
+  display: flex; align-items: center; gap: 20px;
+  padding-top: 32px; border-top: 1px solid rgba(255,85,0,.2);
+  position: relative; z-index: 1; flex-wrap: wrap;
+}
+.author-hex {
+  width: 52px; height: 60px; background: var(--orange);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0; box-shadow: var(--glow-strong);
+}
+.author-name {
+  font-family: 'Orbitron', sans-serif; font-size: .85rem;
+  font-weight: 700; letter-spacing: 2px; color: white; margin-bottom: 4px;
+}
+.author-title {
+  font-size: .65rem; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,85,0,.6);
+}
+.verified-badge {
+  margin-left: auto;
+  border: 1px solid rgba(255,85,0,.3); color: var(--orange);
+  font-size: .6rem; letter-spacing: 3px; padding: 8px 16px;
+  text-transform: uppercase; text-shadow: var(--glow);
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* FOOTER */
+footer {
+  background: var(--dark); padding: 48px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 20px; border-top: 1px solid rgba(255,85,0,.2);
+}
+.footer-logo {
+  font-family: 'Orbitron', sans-serif; font-weight: 900;
+  font-size: 1.2rem; letter-spacing: 4px; color: white;
+}
+.footer-logo span { color: var(--orange); text-shadow: var(--glow); }
+.footer-center {
+  font-size: .65rem; letter-spacing: 3px;
+  color: rgba(255,255,255,.2); text-align: center; line-height: 1.8;
+}
+.footer-right { font-size: .65rem; letter-spacing: 2px; color: rgba(255,85,0,.4); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.up { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+<div class="grid-bg"></div>
+
+<header>
+  <div class="logo">PARA<span>SIT</span>ES</div>
+  <nav>
+    <a href="#">Specs</a>
+    <a href="#">Origine</a>
+    <a href="#">Avis</a>
+  </nav>
+  <div class="header-badge">CYBER // SÉRIE 01</div>
+</header>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Eyewear // Modèle Unique</div>
+    <h1>
+      <span class="outline">PARA</span>
+      <span class="solid">SITES</span>
+      <span class="accent">ORANGE</span>
+    </h1>
+    <p class="hero-desc">
+      Portées quotidiennement par un collègue courageux.<br>
+      Conçues pour un futur que personne n'avait vu venir.<br>
+      En orange. Beaucoup d'orange.
+    </p>
+    <div class="hero-cta">
+      <a href="#" class="btn-primary">EXPLORER</a>
+      <a href="#" class="btn-secondary">IDENTIFIER</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-val">4+</div><div class="stat-label">Branches</div></div>
+      <div><div class="stat-val">∞</div><div class="stat-label">Audace</div></div>
+      <div><div class="stat-val">01</div><div class="stat-label">Porteur</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="/mnt/user-data/uploads/1773064412241_image.png" alt="Parasites Orange">
+      <div class="img-scan"></div>
+      <div class="hero-model-tag">MODEL: PRST-ORG-01 // UNIQUE SPECIMEN</div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <span class="ticker-inner">
+    PARASITES ORANGE<span class="sep">◆</span>SÉRIE CYBER 01<span class="sep">◆</span>PORTÉES AU BUREAU<span class="sep">◆</span>4 BRANCHES MINIMUM<span class="sep">◆</span>NIVEAU SWAG : INCONNU<span class="sep">◆</span>ORANGE NUCLÉAIRE<span class="sep">◆</span>UN SEUL PORTEUR CONNU<span class="sep">◆</span>PARASITES ORANGE<span class="sep">◆</span>SÉRIE CYBER 01<span class="sep">◆</span>PORTÉES AU BUREAU<span class="sep">◆</span>4 BRANCHES MINIMUM<span class="sep">◆</span>NIVEAU SWAG : INCONNU<span class="sep">◆</span>ORANGE NUCLÉAIRE<span class="sep">◆</span>UN SEUL PORTEUR CONNU<span class="sep">◆</span>
+  </span>
+</div>
+
+<section class="specs-section">
+  <div class="specs-inner">
+    <div class="section-head reveal">
+      <h2>Fiche <em>Technique</em></h2>
+      <span class="section-count">06 PARAMÈTRES</span>
+    </div>
+    <div class="specs-grid">
+      <div class="spec-item reveal">
+        <span class="spec-icon">🌀</span>
+        <div class="spec-name">Architecture</div>
+        <div class="spec-val-big">MULTI-BRANCH</div>
+        <div class="spec-desc">Système de branches proliférant. Le designer a appuyé sur "dupliquer" sans s'arrêter.</div>
+      </div>
+      <div class="spec-item reveal">
+        <span class="spec-icon">🔶</span>
+        <div class="spec-name">Coloris</div>
+        <div class="spec-val-big">ORANGE MAX</div>
+        <div class="spec-desc">Visibles de l'autre bout de l'open space. Potentiellement depuis l'espace.</div>
+      </div>
+      <div class="spec-item reveal">
+        <span class="spec-icon">⚡</span>
+        <div class="spec-name">Énergie</div>
+        <div class="spec-val-big">PURE CONFIANCE</div>
+        <div class="spec-desc">Portées sans complexe. Aucune notice d'utilisation trouvée à ce jour.</div>
+      </div>
+      <div class="spec-item reveal">
+        <span class="spec-icon">👁️</span>
+        <div class="spec-name">Verres</div>
+        <div class="spec-val-big">CRYSTAL CLEAR</div>
+        <div class="spec-desc">Transparents. La vision du porteur est aussi dégagée que son sens de la mode.</div>
+      </div>
+      <div class="spec-item reveal">
+        <span class="spec-icon">📐</span>
+        <div class="spec-name">Géométrie</div>
+        <div class="spec-val-big">ANGLE EXTRÊME</div>
+        <div class="spec-desc">Des angles qui n'existent pas dans la nature. Les physiciens sont en réunion.</div>
+      </div>
+      <div class="spec-item reveal">
+        <span class="spec-icon">🏢</span>
+        <div class="spec-name">Contexte</div>
+        <div class="spec-val-big">EN MILIEU BUREAU</div>
+        <div class="spec-desc">Portées quotidiennement dans un environnement professionnel. Aucun RH n'a réagi.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="collar-section">
+  <div class="neon-line"></div>
+  <div class="neon-line"></div>
+  <div class="collar-inner">
+    <div>
+      <div class="collar-eyebrow reveal">// Dossier Classifié</div>
+      <h2 class="reveal">L'<span>Origine</span><br>du Parasite</h2>
+      <p class="reveal">Ces lunettes ne viennent pas d'un magasin normal. Elles viennent d'un autre plan d'existence où le style n'a aucune limite et où l'orange est une philosophie de vie.</p>
+      <p class="reveal">Un collègue les a trouvées. Ou elles l'ont trouvé, lui. On ne sait plus vraiment.</p>
+      <div class="data-readout reveal">
+        <div class="data-row"><span class="data-key">Statut porteur</span><span class="data-val">ACTIF — EN POSTE</span></div>
+        <div class="data-row"><span class="data-key">Fréquence port</span><span class="data-val">QUOTIDIENNE</span></div>
+        <div class="data-row"><span class="data-key">Réactions collègues</span><span class="data-val">CONFUSION / ADMIRATION</span></div>
+        <div class="data-row"><span class="data-key">Règlement intérieur</span><span class="data-val">VIDE JURIDIQUE CONFIRMÉ</span></div>
+        <div class="data-row"><span class="data-key">Niveau menace</span><span class="data-val">STYLISTIQUE UNIQUEMENT</span></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="cyber-frame">
+        <div class="cyber-tag">SPECIMEN // UNIQUE</div>
+        <img src="/mnt/user-data/uploads/1773064412241_image.png" alt="Scan parasites">
+        <div class="scan-overlay"><div class="scan-line"></div></div>
+        <div class="id-label">ID: PRST-ORG-01 // SCAN EN COURS...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonial-section">
+  <div class="testimonial-inner">
+    <div class="section-head reveal" style="margin-bottom: 48px;">
+      <h2>L'<em>Avis</em> Qui Compte</h2>
+      <span class="section-count">01 VERDICT</span>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="rating">
+        <div class="star"></div><div class="star"></div><div class="star"></div>
+        <div class="star"></div><div class="star"></div>
+      </div>
+      <p class="testimonial-text">
+        "Ces lunettes transcendent la réalité telle que nous la connaissons. J'ai regardé dans les verres et j'ai vu <strong>le futur</strong>. Un futur orange. Un futur avec beaucoup de branches. Je ne suis pas prêt, mais mon collègue, lui, l'a toujours été. Il n'est pas humain. Il est <strong>au-delà</strong>."
+      </p>
+      <div class="testimonial-author">
+        <div class="author-hex">👁️</div>
+        <div>
+          <div class="author-name">HENLEY L'INATEIGNABLE</div>
+          <div class="author-title">Témoin Oculaire — Niveau Oracle</div>
+        </div>
+        <div class="verified-badge">✓ VÉRIFIÉ</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">PARA<span>SITE</span>S ORANGE</div>
+  <div class="footer-center">SÉRIE CYBER 01 — ÉDITION BUREAU<br>© 2026 — AUCUN RH N'A ÉTÉ ALERTÉ</div>
+  <div class="footer-right">PRST-ORG-01 // CLASSIFIED</div>
+</footer>
+
+<script>
+  const dot = document.getElementById('dot');
+  const ring = document.getElementById('ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    rx += (mx - rx) * .12; ry += (my - ry) * .12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+
+  const reveals = document.querySelectorAll('.reveal');
+  new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('up'), i * 80);
+    });
+  }, { threshold: 0.1 }).observe.call(
+    new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) setTimeout(() => e.target.classList.add('up'), i * 80);
+      });
+    }, { threshold: 0.1 }),
+    ...reveals
+  );
+
+  // Simpler reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => { if(e.isIntersecting) setTimeout(() => e.target.classList.add('up'), i*80); });
+  }, {threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
